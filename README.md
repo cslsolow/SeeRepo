@@ -31,8 +31,6 @@ python -m minisweagent.run.extra.utils.graph_visualization \
   --up-depth 1 --down-depth 1
 ```
 
-**One graph query can replace 5–10 `grep`/`find`/`ls` actions**, significantly reducing exploration steps and total cost.
-
 ### Graph Building
 
 The graph is constructed entirely from static analysis of Python source files using the `ast` module—no execution needed. See [`src/minisweagent/run/extra/utils/build_graph.py`](src/minisweagent/run/extra/utils/build_graph.py).
