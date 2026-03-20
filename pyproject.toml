@@ -69,7 +69,6 @@ dev = [
 ]
 
 [project.urls]
-Repository = "https://anonymous.4open.science/r/SeeRepo"
 
 [project.scripts]
 mini = "minisweagent.run.mini:app"
