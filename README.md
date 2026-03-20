@@ -9,11 +9,11 @@
 
 SeeRepo extends [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) with a **pre-built repository structure graph**, enabling agents to navigate large codebases efficiently and resolve GitHub issues on [SWE-bench](https://github.com/swe-bench/SWE-bench).
 
-## Core Innovation
+## 💡 Core Innovation
 
 Standard coding agents rely entirely on shell commands (`grep`, `find`, `ls`) to explore a codebase—costing many steps before any edit is made. SeeRepo provides each agent with a pre-built **repository graph** that encodes the structural relationships of every file, class, and function in the target repository.
 
-### Repository Graph
+### 🕸️ Repository Graph
 
 The graph is built offline per repository (stored as a `.pkl` file) and contains four edge types:
 
@@ -34,11 +34,11 @@ python -m minisweagent.run.extra.utils.graph_visualization \
   --up-depth 1 --down-depth 1
 ```
 
-### Graph Building
+### 🔨 Graph Building
 
 The graph is constructed entirely from static analysis of Python source files using the `ast` module—no execution needed. See [`src/minisweagent/run/extra/utils/build_graph.py`](src/minisweagent/run/extra/utils/build_graph.py).
 
-## Installation
+## 🚀 Installation
 
 ```bash
 git clone <this-repo-url>
@@ -48,7 +48,7 @@ pip install -e .
 
 Dependencies: `networkx`, `graphviz`, `typer`, `datasets`, `jinja2`, `rich`, `pyyaml`, `docker`.
 
-## Building the Graph Index
+## 🗂️ Building the Graph Index
 
 Before running on SWE-bench, build (or download) a graph index—a directory of `{instance_id}.pkl` files, one per benchmark instance.
 
@@ -64,7 +64,7 @@ python scripts/build_graph_index.py \
 
 The script starts each SWE-bench Docker image, extracts the repository from `/testbed`, builds the graph, and saves `{instance_id}.pkl` to the output directory.
 
-## Running on SWE-bench
+## ▶️ Running on SWE-bench
 
 ### 1. Set the graph index path
 
@@ -85,7 +85,7 @@ python -m minisweagent.run.extra.swebench \
 
 See [`scripts/run_swebench.sh`](scripts/run_swebench.sh) for a complete example.
 
-### Configuration files
+### ⚙️ Configuration files
 
 | Config | Graph Strategy |
 |--------|----------------|
@@ -101,7 +101,7 @@ python -m minisweagent.run.extra.swebench \
   ...
 ```
 
-## Repository Structure
+## 📁 Repository Structure
 
 ```
 SeeRepo/
@@ -124,6 +124,6 @@ SeeRepo/
     └── run_swebench.sh         # Example run script
 ```
 
-## Acknowledgements
+## 🙏 Acknowledgements
 
 SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) and evaluated on [SWE-bench](https://github.com/swe-bench/SWE-bench). We thank the respective authors for open-sourcing their work.
