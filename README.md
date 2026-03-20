@@ -121,16 +121,6 @@ SeeRepo/
     └── run_swebench.sh         # Example run script
 ```
 
-## Attribution
+## Acknowledgements
 
-SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent). Please cite the original work:
-
-```bibtex
-@inproceedings{yang2024sweagent,
-  title={{SWE}-agent: Agent-Computer Interfaces Enable Automated Software Engineering},
-  author={John Yang and Carlos E Jimenez and Alexander Wettig and Kilian Lieret and Shunyu Yao and Karthik R Narasimhan and Ofir Press},
-  booktitle={The Thirty-eighth Annual Conference on Neural Information Processing Systems},
-  year={2024},
-  url={https://arxiv.org/abs/2405.15793}
-}
-```
+SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) and evaluated on [SWE-bench](https://github.com/swe-bench/SWE-bench). We thank the respective authors for open-sourcing their work.
