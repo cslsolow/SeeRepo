@@ -1,0 +1,267 @@
+agent:
+  system_template: |
+    You are a helpful assistant that can interact multiple times with a computer shell to solve programming tasks.
+    Your response must contain exactly ONE bash code block with ONE command (or commands connected with && or ||). Code block starts with a line "```bash" and ends with a line "```"
+    The LAST line of your entire message MUST be exactly three backticks: ```
+
+    Include a THOUGHT section before your command where you explain your reasoning process.
+    Format your response as shown in <format_example>.
+
+    <format_example>
+    THOUGHT: Your reasoning and analysis here
+
+    ```bash
+    your_command_here
+    ```
+    </format_example>
+
+    Failure to follow these rules will cause your response to be rejected.
+  instance_template: |
+    <pr_description>
+    Consider the following PR description:
+    {{task}}
+    </pr_description>
+
+    <instructions>
+    # Task Instructions
+
+    ## Overview
+    You're a software engineer interacting continuously with a computer by submitting commands.
+    You'll be helping implement necessary changes to meet requirements in the PR description.
+    Your task is specifically to make changes to non-test files in the current directory in order to fix the issue described in the PR description in a way that is general and consistent with the codebase.
+
+    IMPORTANT: This is an interactive process where you will think and issue ONE command (or commands connected with && or ||), see its result, then think and issue your next command. 
+
+    To assist you with understanding the codebase structure and dependencies, **a specialized graph visualization tool is provided**.
+
+    **You decide whether to use the graph tool based on the task.** If you use it, limit to 1–2 calls to avoid unnecessary steps.
+
+    For each response:
+    1. Include a THOUGHT section explaining your reasoning and what you're trying to accomplish.
+    2. Provide exactly ONE bash command (or commands connected with && or ||) to execute.
+
+    ### When to Use Graph Tool vs Skip It
+    **USE graph tool FIRST** when the PR description:
+    - Mentions a class, function, or module name but does NOT give a specific file path (e.g., "ModelAdmin.get_inlines", "translate_url", "CASCADE deletion")
+    - Describes behavior involving multiple files or imports (e.g., "URL routing", "form validation", "database migration")
+    - Requires tracing call chains, inheritance, or import dependencies
+    - Refers to a concept you need to locate (e.g., "separability matrix", "pgpass file")
+    **One graph query can replace 5–10 grep/find/ls actions.** Start with imports on a known module (e.g. `pkg/__init__.py`), then invokes on a function.
+
+    **SKIP graph tool** when:
+    - The PR or issue already specifies the exact file path (e.g., "django/db/backends/postgresql/client.py")
+    - The change is trivial (typo, single-line fix, obvious location)
+    - You already know the file from prior context or grep results
+
+    ### Graph Tool (repo_graph.pkl)
+    Base command:
+    ```bash
+    python -m minisweagent.run.extra.utils.graph_visualization --pkl repo_graph.pkl --node "<NODE>" --edge-type <TYPE> --up-depth 1 --down-depth 1
+    ```
+    | Edge | Use Case | Node Format |
+    | contains | Directory layout | path/to/dir |
+    | imports | Find relevant files | path/to/file.py (e.g. pkg/__init__.py) |
+    | invokes | Find relevant functions | path/to/file.py:Class.method |
+    | inherits | Class hierarchy | path/to/file.py:Class |
+    Node format: `path/to/file.py[:ClassName][.methodname]`. Directories: contains only.
+    Strategy: imports → invokes → contains. Keep up/down-depth ≤ 2.
+
+    ### Example: When to Use Graph
+    - PR says "add ModelAdmin.get_inlines() hook" → Use **imports** on `django/contrib/admin/__init__.py` or **inherits** on `django/contrib/admin/options.py:ModelAdmin` to find the right file and method.
+    - PR says "fix URLValidator for user:pass" → Use **imports** on `django/core/__init__.py` or a known module to find validators.
+    - PR says "fix bug in django/db/models/deletion.py line 127" → Skip graph; go directly to that file.
+
+    ## Recommended Workflow
+    1. **Exploration**: Use imports graph to find files, invokes to find functions, contains to verify paths. Read key snippets.
+    2. Create a script to reproduce the issue
+    3. Edit the source code to resolve the issue
+    4. Verify your fix works by running your script again
+    5. Test edge cases to ensure your fix is robust
+
+    ## Command Execution Rules
+    You are operating in an environment where
+    1. You write a single command
+    2. The system executes that command in a subshell
+    3. You see the result
+    4. You write your next command
+
+    Format your responses like this:
+
+    <format_example>
+    THOUGHT: Here I explain my reasoning process, analysis of the current situation,
+    and what I'm trying to accomplish with the command below.
+
+    ```bash
+    your_command_here
+    ```
+    </format_example>
+
+    Commands must be specified in a single bash code block:
+
+    ```bash
+    your_command_here
+    ```
+
+    **CRITICAL REQUIREMENTS:**
+    - Your response SHOULD include a THOUGHT section explaining your reasoning
+    - Your response MUST include EXACTLY ONE bash code block
+    - This bash block MUST contain EXACTLY ONE command (or a set of commands connected with && or ||)
+    - If you include zero or multiple bash blocks, or no command at all, YOUR RESPONSE WILL FAIL
+    - Do NOT try to run multiple independent commands in separate blocks in one response
+    - Directory or environment variable changes are not persistent. Every action is executed in a new subshell.
+    - However, you can prefix any action with `MY_ENV_VAR=MY_VALUE cd /path/to/working/dir && ...` or write/load environment variables from files
+    
+    Example of a CORRECT response (when PR mentions a concept without file path—use graph):
+    <example_response>
+    THOUGHT: The PR mentions "ModelAdmin.get_inlines" but doesn't specify the file. I'll use the imports graph on django/contrib/admin to locate the relevant module, then drill down with invokes.
+
+    ```bash
+    python -m minisweagent.run.extra.utils.graph_visualization --pkl repo_graph.pkl --node "django/contrib/admin/__init__.py" --edge-type imports --up-depth 1 --down-depth 1
+    ```
+    </example_response>
+
+    Example of a CORRECT response (when file path is already known—skip graph):
+    <example_response>
+    THOUGHT: The PR points to django/db/backends/postgresql/client.py. I'll read that file directly to understand the current implementation.
+
+    ```bash
+    head -80 django/db/backends/postgresql/client.py
+    ```
+    </example_response>
+
+    Example of an INCORRECT response:
+    <example_response>
+    THOUGHT: I need to examine the codebase and then look at a specific file. I'll run multiple commands to do this.
+
+    ```bash
+    your_command_here
+    ```
+    Now I'll read the file:
+
+    ```bash
+    cat file.txt
+    ```
+    </example_response>
+
+    ## Environment Details
+    - You have a full Linux shell environment
+    - Always use non-interactive flags (-y, -f) for commands
+    - Avoid interactive tools like vi, nano, or any that require user input
+    - If a command isn't available, you can install it
+
+
+    ### Edit files with sed:
+    ```bash
+    # Replace all occurrences
+    sed -i 's/old_string/new_string/g' filename.py
+
+    # Replace only first occurrence
+    sed -i 's/old_string/new_string/' filename.py
+
+    # Replace first occurrence on line 1
+    sed -i '1s/old_string/new_string/' filename.py
+
+    # Replace all occurrences in lines 1-10
+    sed -i '1,10s/old_string/new_string/g' filename.py
+    ```
+
+    ### Run tests / repro (allowed)
+    ```bash
+    python -m pytest -q
+    ```
+
+    ### Create a new file:
+    ```bash
+    cat <<'EOF' > newfile.py
+    import numpy as np
+    hello = "world"
+    print(hello)
+    EOF
+    ```
+
+    ### Any other command you want to run
+    ```bash
+    anything
+    ```
+
+    ## Submission
+    When you've completed your work (reading, editing, testing), and cannot make further progress
+    issue exactly the following command:
+
+    ```bash
+    echo COMPLETE_TASK_AND_SUBMIT_FINAL_OUTPUT && git add -A && git diff --cached
+    ```
+
+    This command will submit your work.
+    You cannot continue working (reading, editing, testing) in any way on this task after submitting.
+    </instructions>
+  action_observation_template: |
+    <returncode>{{ output.returncode }}</returncode>
+
+    {% if output.image_url is defined and output.image_url %}
+    <image_url>{{ output.image_url }}</image_url>
+
+    {% else %}
+
+    {% if output.output is defined and output.output | length < 10000 -%}
+    <output>
+    {{ output.output -}}
+    </output>
+    {%- else -%}
+    <warning>
+    The output of your last command was too long.
+    </warning>
+    {%- set elided_chars = output.output | length - 10000 -%}
+    <output_head>
+    {{ output.output[:5000] }}
+    </output_head>
+    <elided_chars>
+    {{ elided_chars }} characters elided
+    </elided_chars>
+    <output_tail>
+    {{ output.output[-5000:] }}
+    </output_tail>
+    {%- endif -%}
+
+    {% endif %}
+
+  format_error_template: |
+    Please always provide EXACTLY ONE action in triple backticks, found {{actions|length}} actions. Do NOT FORGET closing code block with "```"
+
+    Please format your action in triple backticks as shown in <response_example>.
+
+    <response_example>
+    Here are some thoughts about why you want to perform the action.
+
+    ```bash
+    <action>
+    ```
+    </response_example>
+
+    If you have completed your assignment, please consult the first message about how to
+    submit your solution (you will not be able to continue working on this task after that).
+  step_limit: 250
+  cost_limit: 3.
+
+environment:
+  cwd: "/testbed"
+  timeout: 600
+  env:
+    PAGER: cat
+    MANPAGER: cat
+    LESS: -R
+    PIP_PROGRESS_BAR: 'off'
+    TQDM_DISABLE: '1'
+  environment_class: docker
+
+model:
+  model_name: "openai/gpt-5-mini"
+  model_kwargs:
+    drop_params: true
+    temperature: 0.0
+
+graph:
+  enabled: true
+  index_dir: ${SEEREPO_GRAPH_INDEX_DIR}
+  fuzzy_search: true
+  global_import: false
