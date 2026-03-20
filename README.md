@@ -1,5 +1,9 @@
 # SeeRepo: Repository Graph-Augmented Coding Agent
 
+[![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
+[![SWE-bench Verified](https://img.shields.io/badge/SWE--bench-Verified-green.svg)](https://www.swebench.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
+
 SeeRepo extends [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) with a **pre-built repository structure graph**, enabling agents to navigate large codebases efficiently and resolve GitHub issues on [SWE-bench](https://github.com/swe-bench/SWE-bench).
 
 ## Core Innovation

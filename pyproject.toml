@@ -4,16 +4,15 @@ build-backend = "setuptools.build_meta"
 
 
 [project]
-name = "mini-swe-agent"
+name = "seerepo"
 dynamic = ["version"]
-description = "Nano SWE Agent - A simple AI software engineering agent"
+description = "SeeRepo: Repository Graph-Augmented Coding Agent for SWE-bench"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {file = "LICENSE.md"}
-keywords = ["nlp", "agents", "code"]
+keywords = ["nlp", "agents", "code", "swe-bench", "code-graph"]
 authors = [
-    {name = "Kilian Lieret", email = "kilian.lieret@posteo.de" },
-    {name = "Carlos E. Jimenez", email = "carlosej@princeton.edu" },
+    {name = "Anonymous"},
 ]
 
 # Classifiers help users find your project by categorizing it.
@@ -70,9 +69,7 @@ dev = [
 ]
 
 [project.urls]
-Documentation = "https://mini-swe-agent.com/latest/"
-Repository = "https://github.com/SWE-agent/mini-SWE-agent"
-"Bug Tracker" = "https://github.com/SWE-agent/mini-SWE-agent/issues"
+Repository = "https://anonymous.4open.science/r/SeeRepo"
 
 [project.scripts]
 mini = "minisweagent.run.mini:app"
