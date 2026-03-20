@@ -137,38 +137,31 @@ class ProgressTrackingAgent(DefaultAgent):
     def execute_action(self, action: dict) -> dict:
         """Override execute_action to handle graph_visualization commands externally."""
         command = action["action"]
-        # 检测是否是graph_visualization工具命令
+        # Run graph_visualization commands on the host rather than inside the container.
         if "python -m minisweagent.run.extra.utils.graph_visualization" in command:
-            # 在外部执行graph_visualization命令
-            # graph_visualization.py 有自己的路径解析逻辑（优先级：环境变量 > 命令行参数 > 默认路径）
-            # 如果命令中明确指定了 --pkl repo_graph.pkl，需要替换为外部绝对路径
-            # 如果命令中没有 --pkl 参数，环境变量 MSWEA_REPO_GRAPH_PKL 会自动生效
-            
-            # 从环境配置中获取环境变量（这些变量存储在 self.env.config.env 中，不在 os.environ 中）
+            # graph_visualization.py resolves paths via env vars (priority: env var > CLI arg > default).
+            # If the command explicitly specifies --pkl repo_graph.pkl, replace it with the host absolute path.
+            # If no --pkl argument is present, MSWEA_REPO_GRAPH_PKL takes effect automatically.
+
+            # Read env vars from the environment config (stored in self.env.config.env, not os.environ).
             external_pkl_path = None
             instance_dir = None
             if hasattr(self.env, "config") and hasattr(self.env.config, "env"):
                 external_pkl_path = self.env.config.env.get("MSWEA_REPO_GRAPH_PKL")
                 instance_dir = self.env.config.env.get("MSWEA_INSTANCE_DIR")
-            
+
             if external_pkl_path:
-                # 只替换明确指定了 --pkl repo_graph.pkl 的情况
-                # 处理 --pkl repo_graph.pkl 或 --pkl "repo_graph.pkl" 等格式
+                # Replace --pkl repo_graph.pkl (with or without quotes) with the absolute host path.
                 command = re.sub(r'--pkl\s+["\']?repo_graph\.pkl["\']?', f'--pkl {external_pkl_path}', command)
-            
-            # 获取工作目录（从环境配置或当前目录）
+
             cwd = instance_dir if instance_dir else os.getcwd()
-            
-            # 准备环境变量（确保外部执行时可以使用必要的环境变量）
-            # graph_visualization.py 会优先使用这些环境变量
+
             exec_env = os.environ.copy()
             if instance_dir:
                 exec_env["MSWEA_INSTANCE_DIR"] = instance_dir
             if external_pkl_path:
                 exec_env["MSWEA_REPO_GRAPH_PKL"] = external_pkl_path
-            
-            # 在外部执行命令
-            # 获取超时时间（从环境配置或默认600秒）
+
             timeout = getattr(self.env.config, "timeout", None) if hasattr(self.env, "config") else None
             timeout = timeout or 600
             
@@ -199,7 +192,7 @@ class ProgressTrackingAgent(DefaultAgent):
             self.has_finished(output)
             return output | {"action": action["action"]}
         else:
-            # 普通命令在docker内执行，调用父类方法
+            # Regular commands run inside the Docker container via the parent class.
             return super().execute_action(action)
 
     def _maybe_attach_graph_png(self, output: dict) -> tuple[list[dict], str]:
@@ -361,7 +354,7 @@ class ProgressTrackingAgent(DefaultAgent):
             if data_url:
                 self.add_message("user", [{"type": "image_url", "image_url": {"url": data_url}}])
             else:
-                # Pillow 不可用时降级为文本
+                # Fall back to plain text when Pillow is unavailable.
                 self.add_message("user", observation_text)
         else:
             self.add_message("user", observation_text)
@@ -388,7 +381,7 @@ def get_sb_environment(config: dict, instance: dict) -> Environment:
         env_config["image"] = image_name
     elif env_config["environment_class"] == "singularity":
         env_config["image"] = "docker://" + image_name
-    # 支持对 cwd / env 等字符串进行模板渲染，便于本地仓库按实例切换
+    # Support Jinja2 template rendering for cwd / env values to allow per-instance path switching.
     for key in ("cwd",):
         if key in env_config and isinstance(env_config[key], str):
             env_config[key] = Template(env_config[key], undefined=StrictUndefined).render(**instance)
@@ -430,14 +423,12 @@ def remove_from_preds_file(output_path: Path, instance_id: str):
             del output_data[instance_id]
             output_path.write_text(json.dumps(output_data, indent=2))
 
-# 建图需要的 repo_path 从 cwd 中解析出来
 def resolve_repo_path_from_cwd(config: dict, instance: dict) -> str | None:
     cwd = (config.get("environment", {}) or {}).get("cwd")
     if not cwd:
         return None
     return Template(cwd, undefined=StrictUndefined).render(**instance)
 
-# 建图并保存
 def build_and_save_repo_graph_pkl(
     *,
     instance_dir: Path,
@@ -448,7 +439,7 @@ def build_and_save_repo_graph_pkl(
     instance_dir.mkdir(parents=True, exist_ok=True)
     graph_pkl = instance_dir / "repo_graph.pkl"
 
-    # 已存在就跳过（避免重复算）
+    # Skip if already built to avoid redundant computation.
     if graph_pkl.exists():
         return
 
@@ -458,7 +449,6 @@ def build_and_save_repo_graph_pkl(
         global_import=global_import,
     )
 
-    # === 关键：和 loc agent 完全一致 ===
     with open(graph_pkl, "wb") as f:
         pickle.dump(G, f)
 
@@ -614,7 +604,6 @@ def main(
     logger.info(f"Loading dataset {dataset_path}, split {split}...")
     p = Path(dataset_path)
     if p.suffix in [".jsonl", ".json"]:
-        # 关键：用 json builder，并显式把 split 映射到这一个文件
         ds = load_dataset("json", data_files={split: str(p)})
         instances = list(ds[split])
     else:

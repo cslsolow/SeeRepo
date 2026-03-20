@@ -311,7 +311,8 @@ def _resolve_context(
         if project_root:
             instance_dir = (project_root / instance_dir).resolve()
 
-    # 智能体只会传 --pkl repo_graph.pkl；此处将「仅文件名为 repo_graph.pkl」视为使用配置路径，不用作字面路径
+    # Agents always pass --pkl repo_graph.pkl as a bare filename; treat it as a sentinel
+    # that triggers env-var / instance_dir resolution rather than a literal relative path.
     pkl_env = os.environ.get("MSWEA_REPO_GRAPH_PKL")
     is_default_pkl_arg = (
         pkl is not None
@@ -321,7 +322,7 @@ def _resolve_context(
     if pkl_env:
         pkl_path = Path(pkl_env)
     elif is_default_pkl_arg:
-        # --pkl repo_graph.pkl：用环境变量或 instance_dir 解析，不把 repo_graph.pkl 当相对路径
+        # Resolve repo_graph.pkl via instance_dir; do not treat it as a literal relative path.
         if instance_dir is not None:
             pkl_path = instance_dir / "repo_graph.pkl"
         else:
@@ -448,11 +449,9 @@ def main(
     H = _extract_edge_digraph(G, edge_type=edge_type)
     if node in G and node not in H:
         H.add_node(node, **G.nodes[node])
-    # --- 修改开始 ---
-    # 如果用户输入 "."，将其转换为图内部使用的根节点标识 "/"
+    # Normalize "." to "/" so users can pass "." to refer to the repo root.
     if node == ".":
         node = "/"
-    # --- 修改结束 ---
     center = _ensure_root(H, "/")
     # if user passed node != '/', use it as center (but keep ensure_root for '/' only)
     center = node if node else "/"
