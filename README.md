@@ -2,7 +2,6 @@
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![SWE-bench Verified](https://img.shields.io/badge/SWE--bench-Verified-brightgreen.svg)](https://www.swebench.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 [![Docker](https://img.shields.io/badge/docker-required-blue.svg?logo=docker)](https://www.docker.com/)
 [![Static Analysis](https://img.shields.io/badge/graph-static%20AST%20analysis-orange.svg)](src/minisweagent/run/extra/utils/build_graph.py)
 [![Built on mini-swe-agent](https://img.shields.io/badge/built%20on-mini--swe--agent-purple.svg)](https://github.com/SWE-agent/mini-swe-agent)
