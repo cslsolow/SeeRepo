@@ -5,6 +5,7 @@
 [![Docker](https://img.shields.io/badge/docker-required-blue.svg?logo=docker)](https://www.docker.com/)
 [![Static Analysis](https://img.shields.io/badge/graph-static%20AST%20analysis-orange.svg)](src/minisweagent/run/extra/utils/build_graph.py)
 [![Built on mini-swe-agent](https://img.shields.io/badge/built%20on-mini--swe--agent-purple.svg)](https://github.com/SWE-agent/mini-swe-agent)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 SeeRepo extends [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) with a **pre-built repository structure graph**, enabling agents to navigate large codebases efficiently and resolve GitHub issues on [SWE-bench](https://github.com/swe-bench/SWE-bench).
 
@@ -42,10 +43,13 @@ The graph is constructed entirely from static analysis of Python source files us
 ```bash
 git clone <this-repo-url>
 cd SeeRepo
+pip install -r requirements.txt
 pip install -e .
 ```
 
-Dependencies: `networkx`, `graphviz`, `typer`, `datasets`, `jinja2`, `rich`, `pyyaml`, `docker`.
+- **License:** Apache-2.0 (see [`LICENSE`](LICENSE)).
+- **System:** Docker for SWE-bench; for graph PNG rendering, install the Graphviz `dot` binary (e.g. `apt install graphviz`).
+- **Optional LiteLLM cost registry:** set `LITELLM_MODEL_REGISTRY_PATH` to the repo-root [`litellm_registry.json`](litellm_registry.json) (entries match models used in the paper: GPT-5-mini, GPT-5.1, Kimi K2.5, Doubao-Seed-2.0-Lite).
 
 ## 🗂️ Building the Graph Index
 

@@ -1,13 +1,10 @@
 import argparse
 import ast
 import os
-import re
 from collections import Counter, defaultdict
 from typing import List
 
 import networkx as nx
-import matplotlib.pyplot as plt
-from matplotlib.lines import Line2D
 
 VERSION = 'v2.3'
 NODE_TYPE_DIRECTORY = 'directory'
@@ -28,24 +25,6 @@ def is_skip_dir(dirname):
         if skip_dir in dirname:
             return True
     return False
-
-
-def handle_edge_cases(code):
-    # hard-coded edge cases
-    code = code.replace('\ufeff', '')
-    code = code.replace('constants.False', '_False')
-    code = code.replace('constants.True', '_True')
-    code = code.replace("False", "_False")
-    code = code.replace("True", "_True")
-    code = code.replace("DOMAIN\\username", "DOMAIN\\\\username")
-    code = code.replace("Error, ", "Error as ")
-    code = code.replace('Exception, ', 'Exception as ')
-    code = code.replace("print ", "yield ")
-    pattern = r'except\s+\(([^,]+)\s+as\s+([^)]+)\):'
-    # Replace 'as' with ','
-    code = re.sub(pattern, r'except (\1, \2):', code)
-    code = code.replace("raise AttributeError as aname", "raise AttributeError")
-    return code
 
 
 def find_imports(filepath, repo_path, tree=None):
@@ -177,7 +156,6 @@ class CodeAnalyzer(ast.NodeVisitor):
 def analyze_file(filepath):
     with open(filepath, 'r') as file:
         code = file.read()
-        # code = handle_edge_cases(code)
         try:
             tree = ast.parse(code, filename=filepath)
         except:
@@ -632,6 +610,10 @@ def analyze_invokes(node, code_tree, graph, repo_path):
 
 
 def visualize_graph(G):
+    """Optional debug visualization; requires matplotlib (not needed for `build_graph()`)."""
+    import matplotlib.pyplot as plt
+    from matplotlib.lines import Line2D
+
     node_types = set(nx.get_node_attributes(G, 'type').values())
     node_shapes = {NODE_TYPE_CLASS: 'o', NODE_TYPE_FUNCTION: 's', NODE_TYPE_FILE: 'D',
                    NODE_TYPE_DIRECTORY: '^'}
@@ -738,19 +720,14 @@ def traverse_directory_structure(graph, root='/'):
     traverse(root, '', False)
 
 
-def main():
-    # Generate Dependency Graph
+def main(args: argparse.Namespace) -> None:
     graph = build_graph(args.repo_path, global_import=args.global_import)
 
     if args.visualize:
         visualize_graph(graph)
 
-    inherit_list = []
     edge_types = []
     for u, v, data in graph.edges(data=True):
-        if data['type'] == EDGE_TYPE_IMPORTS:
-            inherit_list.append((u, v))
-            # print((u, v))
         edge_types.append(data['type'])
     print()
     print(Counter(edge_types))
@@ -761,7 +738,6 @@ def main():
     print(Counter(node_types))
 
     traverse_directory_structure(graph)
-    # breakpoint()
 
 
 if __name__ == '__main__':
@@ -769,7 +745,6 @@ if __name__ == '__main__':
     parser.add_argument('--repo_path', type=str, default='DATA/repo/pallets__flask-5063')
     parser.add_argument('--visualize', action='store_true')
     parser.add_argument('--global_import', action='store_true')
-    args = parser.parse_args()
-
-    main()
+    cli_args = parser.parse_args()
+    main(cli_args)
 

@@ -12,8 +12,9 @@
 #   3. Ensure Docker is running and the SWE-bench images are accessible.
 #
 # Usage:
-#   export ANTHROPIC_API_KEY=<your-key>
 #   export SEEREPO_GRAPH_INDEX_DIR=/path/to/graph_index
+#   export OPENAI_API_KEY=<key>   # if using OpenAI / compatible endpoints
+#   # and/or ANTHROPIC_API_KEY, etc., depending on model in your YAML
 #   bash scripts/run_swebench.sh
 
 set -euo pipefail
@@ -21,7 +22,10 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 : "${SEEREPO_GRAPH_INDEX_DIR:?Please set SEEREPO_GRAPH_INDEX_DIR to the graph index directory}"
-: "${ANTHROPIC_API_KEY:?Please set ANTHROPIC_API_KEY}"
+
+if [[ -z "${OPENAI_API_KEY:-}" && -z "${ANTHROPIC_API_KEY:-}" && -z "${AZURE_API_KEY:-}" ]]; then
+  echo "Warning: No OPENAI_API_KEY, ANTHROPIC_API_KEY, or AZURE_API_KEY set. LiteLLM may fail at runtime." >&2
+fi
 
 OUTPUT_DIR="${OUTPUT_DIR:-${REPO_ROOT}/trajectories/seerepo_verified}"
 WORKERS="${WORKERS:-4}"

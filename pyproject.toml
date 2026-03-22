@@ -9,6 +9,7 @@ dynamic = ["version"]
 description = "SeeRepo: Repository Graph-Augmented Coding Agent for SWE-bench"
 readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "Apache-2.0"}
 keywords = ["nlp", "agents", "code", "swe-bench", "code-graph"]
 authors = [
     {name = "Anonymous"},
@@ -22,6 +23,7 @@ classifiers = [
   "Operating System :: OS Independent",
   # Indicate who your project is intended for
   "Intended Audience :: Developers",
+  "License :: OSI Approved :: Apache Software License",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3 :: Only",
 ]
@@ -40,11 +42,16 @@ dependencies = [
     "textual",
     "prompt_toolkit",
     "openai != 1.100.0,!=1.100.1",  # https://github.com/SWE-agent/mini-swe-agent/issues/446
+    "networkx>=3.0",
+    "graphviz>=0.20",  # Python package; system `dot` binary still required for PNG rendering
+    "matplotlib>=3.7",  # optional for build_graph visualize_graph(); kept in core for reproducible installs
+    "datasets>=2.14",  # SWE-bench batch runner
+    "pillow>=10.0",  # optional image handling in swebench runner
 ]
 
 [project.optional-dependencies]
 full = [
-    "mini-swe-agent[dev]",
+    "seerepo[dev]",
     "swe-rex>=1.4.0",
 ]
 
@@ -65,6 +72,7 @@ dev = [
     "portkey-ai",
 ]
 
+# Anonymous review: leave URLs empty. After acceptance, set Homepage / Repository.
 [project.urls]
 
 [project.scripts]
