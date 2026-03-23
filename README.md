@@ -49,7 +49,7 @@ pip install -e .
 
 - **License:** Apache-2.0 (see [`LICENSE`](LICENSE)).
 - **System:** Docker for SWE-bench; for graph PNG rendering, install the Graphviz `dot` binary (e.g. `apt install graphviz`).
-- **Optional LiteLLM cost registry:** set `LITELLM_MODEL_REGISTRY_PATH` to the repo-root [`litellm_registry.json`](litellm_registry.json) (entries match models used in the paper: GPT-5-mini, GPT-5.1, Kimi K2.5, Doubao-Seed-2.0-Lite).
+- **Optional LiteLLM model registry:** if your provider uses custom model ids, set `LITELLM_MODEL_REGISTRY_PATH` to a JSON file (see LiteLLM `register_model` docs).
 
 ## 🗂️ Building the Graph Index
 
