@@ -9,6 +9,10 @@
 
 SeeRepo extends [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) with a **pre-built repository structure graph**, enabling agents to navigate large codebases efficiently and resolve GitHub issues on [SWE-bench](https://github.com/swe-bench/SWE-bench).
 
+<p align="center">
+  <img src="assets/overview.png" alt="Overview of SeeRepo" width="900"/>
+</p>
+
 ## 💡 Core Innovation
 
 Standard coding agents rely entirely on shell commands (`grep`, `find`, `ls`) to explore a codebase—costing many steps before any edit is made. SeeRepo provides each agent with a pre-built **repository graph** that encodes the structural relationships of every file, class, and function in the target repository.
