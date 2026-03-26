@@ -104,7 +104,7 @@ The default model is `openai/gpt-5-mini`. Override via `--model`:
 ```bash
 python -m minisweagent.run.extra.swebench \
   --config src/minisweagent/config/extra/SeeRepo.yaml \
-  --model anthropic/claude-sonnet-4-5 \
+  --model openai/gpt-5-mini \
   ...
 ```
 
