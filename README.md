@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="assets/background.jpg" alt="Logo of SeeRepo" width="900"/>
-</p>
+
 
 # SeeRepo: Repository Graph-Augmented Coding Agent
 
