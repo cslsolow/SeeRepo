@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/SeeRepo Logo v2.png" alt="Logo of SeeRepo" width="600"/>
+  <img src="assets/SeeRepo Logo v2.png" alt="Logo of SeeRepo" width="200"/>
 </p>
 
 # SeeRepo: Repository Graph-Augmented Coding Agent
