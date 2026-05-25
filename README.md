@@ -1,9 +1,7 @@
 <p align="center">
-  <img src="assets/SeeRepo Logo v2.png" alt="Logo of SeeRepo" width="500"/>
+  <img src="assets/SeeRepo Logo v2.png" alt="Logo of SeeRepo" width="450"/>
 </p>
-
 # SeeRepo: Repository Graph-Augmented Coding Agent
-
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![SWE-bench Verified](https://img.shields.io/badge/SWE--bench-Verified-brightgreen.svg)](https://www.swebench.com/)
 [![Docker](https://img.shields.io/badge/docker-required-blue.svg?logo=docker)](https://www.docker.com/)
