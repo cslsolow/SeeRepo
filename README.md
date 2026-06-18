@@ -2,7 +2,7 @@
   <img src="assets/SeeRepo Logo v2.png" alt="Logo of SeeRepo" width="450"/>
 </p>
 
-# SeeRepo: LLM Agents Can See Code Repositories
+# LLM Agents Can See Code Repositories
 
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![SWE-bench Verified](https://img.shields.io/badge/SWE--bench-Verified-brightgreen.svg)](https://www.swebench.com/)
