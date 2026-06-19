@@ -137,4 +137,17 @@ SeeRepo/
 
 ## 🙏 Acknowledgements
 
+## Citation
+
+If you find this work helpful for your research or development, please consider citing our paper:
+
+```bibtex
+@article{ma2026llm,
+  title={LLM Agents Can See Code Repositories},
+  author={Ma, Dongjian and Chen, Silin and Yang, Yufei and Shi, Yulin and Gu, Xiaodong and others},
+  journal={arXiv preprint arXiv:2606.14061},
+  year={2026}
+}
+```
+
 SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) and evaluated on [SWE-bench](https://github.com/swe-bench/SWE-bench). We thank the respective authors for open-sourcing their work.
