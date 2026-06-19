@@ -135,8 +135,6 @@ SeeRepo/
     └── run_swebench.sh         # Example run script
 ```
 
-## 🙏 Acknowledgements
-
 ## Citation
 
 If you find this work helpful for your research or development, please consider citing our paper:
@@ -149,5 +147,8 @@ If you find this work helpful for your research or development, please consider 
   year={2026}
 }
 ```
+
+
+## 🙏 Acknowledgements
 
 SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) and evaluated on [SWE-bench](https://github.com/swe-bench/SWE-bench). We thank the respective authors for open-sourcing their work.
