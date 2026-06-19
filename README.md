@@ -126,7 +126,7 @@ SeeRepo/
 │   │       ├── swebench.py     # SWE-bench batch runner (SeeRepo entry point)
 │   │       └── utils/
 │   │           ├── build_graph.py          # Static graph construction
-│   │           └── graph_visualization.py  # Graph query CLI (used by agents)
+│   │           └── graph_visualization.py  # Graph query CLI (usedu by agents)
 │   └── config/extra/
 │       ├── SeeRepo.yaml         # Main config (always query graph first)
 │       └── SeeRepo_smart.yaml   # Smart graph usage variant
@@ -134,6 +134,10 @@ SeeRepo/
     ├── build_graph_index.py    # Build graph index for SWE-bench instances
     └── run_swebench.sh         # Example run script
 ```
+
+## 🙏 Acknowledgements
+
+SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) and evaluated on [SWE-bench](https://github.com/swe-bench/SWE-bench). We thank the respective authors for open-sourcing their work.
 
 ## Citation
 
@@ -147,8 +151,3 @@ If you find this work helpful for your research or development, please consider 
   year={2026}
 }
 ```
-
-
-## 🙏 Acknowledgements
-
-SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) and evaluated on [SWE-bench](https://github.com/swe-bench/SWE-bench). We thank the respective authors for open-sourcing their work.
