@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/SeeRepo Logo v2.png" alt="Logo of SeeRepo" width="450"/>
+  <img src="assets/Robot eyes.png" alt="Logo of SeeRepo" width="450"/>
 </p>
 
 # LLM Agents Can See Code Repositories
