@@ -144,10 +144,13 @@ SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-sw
 If you find this work helpful for your research or development, please consider citing our paper:
 
 ```bibtex
-@article{ma2026llm,
-  title={LLM Agents Can See Code Repositories},
-  author={Ma, Dongjian and Chen, Silin and Yang, Yufei and Shi, Yulin and Gu, Xiaodong and others},
-  journal={arXiv preprint arXiv:2606.14061},
-  year={2026}
+@misc{ma2026llmagentscoderepositories,
+      title={LLM Agents Can See Code Repositories}, 
+      author={Dongjian Ma and Silin Chen and Yufei Yang and Yuling Shi and Yanfu Yan and Xiaodong Gu},
+      year={2026},
+      eprint={2606.14061},
+      archivePrefix={arXiv},
+      primaryClass={cs.SE},
+      url={https://arxiv.org/abs/2606.14061}, 
 }
 ```
