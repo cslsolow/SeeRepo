@@ -4,11 +4,14 @@
 
 # LLM Agents Can See Code Repositories
 
+[![arXiv](https://img.shields.io/badge/arXiv-2606.14061-b31b1b.svg)](https://arxiv.org/abs/2606.14061)
+[![Accepted: ASE 2026](https://img.shields.io/badge/Accepted-ASE%202026-brightgreen.svg)](https://conf.researchr.org/home/ase-2026)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![SWE-bench Verified](https://img.shields.io/badge/SWE--bench-Verified-brightgreen.svg)](https://www.swebench.com/)
 [![Docker](https://img.shields.io/badge/docker-required-blue.svg?logo=docker)](https://www.docker.com/)
 [![Static Analysis](https://img.shields.io/badge/graph-static%20AST%20analysis-orange.svg)](src/minisweagent/run/extra/utils/build_graph.py)
 [![Built on mini-swe-agent](https://img.shields.io/badge/built%20on-mini--swe--agent-purple.svg)](https://github.com/SWE-agent/mini-swe-agent)
+[![GitHub stars](https://img.shields.io/github/stars/cslsolow/SeeRepo?style=social)](https://github.com/cslsolow/SeeRepo)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 SeeRepo extends [mini-swe-agent](https://github.com/SWE-agent/mini-swe-agent) with a **pre-built repository structure graph**, enabling agents to navigate large codebases efficiently and resolve GitHub issues on [SWE-bench](https://github.com/swe-bench/SWE-bench).
