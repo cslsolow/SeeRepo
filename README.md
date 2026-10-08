@@ -147,13 +147,21 @@ SeeRepo is built on top of [mini-swe-agent](https://github.com/SWE-agent/mini-sw
 If you find this work helpful for your research or development, please consider citing our paper:
 
 ```bibtex
-@misc{ma2026llmagentscoderepositories,
-      title={LLM Agents Can See Code Repositories}, 
-      author={Dongjian Ma and Silin Chen and Yufei Yang and Yuling Shi and Yanfu Yan and Xiaodong Gu},
-      year={2026},
-      eprint={2606.14061},
-      archivePrefix={arXiv},
-      primaryClass={cs.SE},
-      url={https://arxiv.org/abs/2606.14061}, 
+@inproceedings{10.1145/3832783.3834363,
+author = {Ma, Dongjian and Chen, Silin and Yang, Yufei and Shi, Yuling and Yan, Yanfu and Gu, Xiaodong},
+title = {LLM Agents Can See Code Repositories},
+year = {2026},
+isbn = {9798400728822},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3832783.3834363},
+doi = {10.1145/3832783.3834363},
+abstract = {Coding agents powered by large language models (LLMs) have demonstrated remarkable proficiency in software engineering tasks. Yet modern coding agents rely almost entirely on text, leaving a major gap between how human developers and agents comprehend software repositories. Human developers leverage visual repository cues such as folder hierarchies and dependencies, raising the question of whether multimodal models can similarly improve repository understanding. In this paper, we conduct the first systematic empirical study on multimodal foundation models for repository-level tasks. Our experiments across four modern multimodal models reveal that while a vision-only context representation degrades performance and inflates token costs, integrating visualized context graphs as a supplementary modality can help agents grasp the repository more efficiently. Specifically, providing agents with visual structural context alongside standard text interfaces reduces input token consumption by up to 26\% while maintaining or improving issue-resolution accuracy. Furthermore, we demonstrate that visual tools are most effective when utilized during the fault localization stage and when agents autonomously dictate their exploration depth. Our findings highlight a promising hybrid-modality pathway for the design of next-generation coding agents.},
+booktitle = {Proceedings of the 41st IEEE/ACM International Conference on Automated Software Engineering},
+pages = {411–423},
+numpages = {13},
+keywords = {issue resolution, multimodal large language models, repository visualization, software engineering agents},
+location = {Munich, Germany},
+series = {ASE '26}
 }
 ```
